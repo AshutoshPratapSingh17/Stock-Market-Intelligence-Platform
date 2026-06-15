@@ -33,8 +33,8 @@ os.environ.pop("PG_PASSWORD", None)
 # 1. Import tests - make sure every module loads without error
 # ==========================================================================
 
-def test_import_data_pipeline():
-    module = importlib.import_module("data_pipeline")
+def test_import_stock_pipeline():
+    module = importlib.import_module("stock_pipeline")
     assert hasattr(module, "calculate_rsi")
     assert hasattr(module, "calculate_macd")
     assert hasattr(module, "calculate_bollinger_bands")
@@ -57,7 +57,7 @@ def test_import_api():
 
 def test_rsi_bounds():
     """RSI must always be between 0 and 100."""
-    from data_pipeline import calculate_rsi
+    from stock_pipeline import calculate_rsi
 
     prices = pd.Series([100, 102, 101, 105, 110, 108, 107, 111, 115, 113,
                          112, 116, 120, 119, 121, 125, 123, 122, 126, 130])
@@ -70,7 +70,7 @@ def test_rsi_bounds():
 
 def test_macd_shapes():
     """MACD line, signal line, and histogram must all align in length."""
-    from data_pipeline import calculate_macd
+    from stock_pipeline import calculate_macd
 
     prices = pd.Series(range(100, 150))
     macd_line, signal_line, hist = calculate_macd(prices)
@@ -85,7 +85,7 @@ def test_macd_shapes():
 
 def test_bollinger_bands_ordering():
     """Upper band must always be >= middle band >= lower band."""
-    from data_pipeline import calculate_bollinger_bands
+    from stock_pipeline import calculate_bollinger_bands
 
     prices = pd.Series([100, 102, 101, 105, 110, 108, 107, 111, 115, 113,
                          112, 116, 120, 119, 121, 125, 123, 122, 126, 130])
