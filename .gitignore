@@ -1,0 +1,30 @@
+# Environment variables (NEVER commit secrets)
+.env
+
+# Python
+__pycache__/
+*.pyc
+venv/
+.venv/
+
+# Database
+stocks.db
+*.db
+test_stocks.db
+
+# Logs
+*.log
+
+# ML model artifacts (can be large; regenerate via ml_model.py train)
+models/
+
+# MLflow local tracking data
+mlflow.db
+mlruns/
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# OS files
+.DS_Store
+Thumbs.db
