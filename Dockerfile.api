@@ -22,9 +22,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application code
 COPY api.py .
-COPY data_pipeline.py .
+COPY stock_pipeline.py .
 COPY ml_model.py .
-COPY models/ ./models/
 
 # Expose the FastAPI port
 EXPOSE 8000
