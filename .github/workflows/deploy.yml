@@ -95,10 +95,18 @@ jobs:
     needs: build
 
     steps:
-      - name: Trigger Render deploy - FastAPI backend
+- name: Trigger Render deploy - FastAPI backend
         run: |
-          curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK_API }}"
+          if [ -n "${{ secrets.RENDER_DEPLOY_HOOK_API }}" ]; then
+            curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK_API }}"
+          else
+            echo "RENDER_DEPLOY_HOOK_API not set — skipping deploy (set this secret when ready to deploy to Render)"
+          fi
 
       - name: Trigger Render deploy - Streamlit dashboard
         run: |
-          curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK_STREAMLIT }}"
+          if [ -n "${{ secrets.RENDER_DEPLOY_HOOK_STREAMLIT }}" ]; then
+            curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK_STREAMLIT }}"
+          else
+            echo "RENDER_DEPLOY_HOOK_STREAMLIT not set — skipping deploy (set this secret when ready to deploy to Render)"
+          fi
