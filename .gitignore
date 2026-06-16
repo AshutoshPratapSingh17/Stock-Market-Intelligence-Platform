@@ -16,7 +16,7 @@ test_stocks.db
 *.log
 
 # ML model artifacts (can be large; regenerate via ml_model.py train)
-models/
+
 
 # MLflow local tracking data
 mlflow.db
