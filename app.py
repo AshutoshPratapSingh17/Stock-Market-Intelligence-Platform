@@ -360,14 +360,28 @@ CUSTOM_CSS = """
     .stButton button div {
         color: #e9ebf1 !important;
     }
+    /* ====================================================================
+       MOBILE RESPONSIVE
+    ==================================================================== */
+    @media (max-width: 768px) {
+        .hero-banner {
+            height: 100px;
+        }
+        .hero-content h1 {
+            font-size: 1.3rem;
+        }
+        .kpi-value {
+            font-size: 1.4rem;
+        }
+    }
     .stButton button {
         width: 100% !important;
         background-color: #12151f !important;
         border: 1px solid #232838 !important;
         border-radius: 14px !important;
-        padding: 16px 10px !important;
+        padding: 10px 8px !important;
         font-weight: 700 !important;
-        font-size: 0.85rem !important;
+        font-size: 0.78rem !important;
         line-height: 1.4 !important;
         white-space: pre-line !important;
         transition: border-color 0.15s ease, transform 0.15s ease !important;
