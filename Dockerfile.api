@@ -4,29 +4,24 @@
 
 FROM python:3.11-slim
 
-# Prevent Python from writing .pyc files and buffering stdout/stderr
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1
 
 WORKDIR /app
 
-# Install system dependencies needed for psycopg2 and xgboost
 RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \
     libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Python dependencies first (better Docker layer caching)
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy application code
 COPY api.py .
 COPY stock_pipeline.py .
 COPY ml_model.py .
+COPY models/ ./models/
 
-# Expose the FastAPI port
 EXPOSE 8000
 
-# Run the API with uvicorn
 CMD ["uvicorn", "api:app", "--host", "0.0.0.0", "--port", "8000"]
