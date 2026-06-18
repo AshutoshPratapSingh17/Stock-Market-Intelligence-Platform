@@ -349,8 +349,50 @@ CUSTOM_CSS = """
     }
 
     /* ====================================================================
-       STOCK PICKER BUTTONS
-       Style Streamlit's native st.button() to look like stock cards.
+       MOBILE RESPONSIVE FIXES
+    ==================================================================== */
+    @media (max-width: 768px) {
+        /* Fix hero banner on mobile */
+        .hero-banner {
+            height: 110px !important;
+            background-image:
+                linear-gradient(120deg, rgba(11,14,20,0.4) 0%, rgba(11,14,20,0.85) 100%),
+                url('https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&w=800&q=60') !important;
+            background-size: cover !important;
+            background-position: center !important;
+        }
+        .hero-content h1 {
+            font-size: 1.25rem !important;
+        }
+        .hero-content p {
+            font-size: 0.82rem !important;
+        }
+        /* Smaller KPI values on mobile */
+        .kpi-value {
+            font-size: 1.5rem !important;
+        }
+        /* Compact picker buttons on mobile */
+        .stButton button {
+            padding: 10px 6px !important;
+            font-size: 0.75rem !important;
+        }
+        /* Hide sidebar image on very small screens */
+        .sidebar-banner {
+            height: 80px !important;
+        }
+    }
+
+    /* ====================================================================
+       PLOTLY CHART — disable touch zoom / pan (use toolbar only)
+       Sets touch-action: none on the plotly svg so swipe scrolls the page
+       instead of accidentally zooming the chart.
+    ==================================================================== */
+    .js-plotly-plot .plotly svg {
+        touch-action: pan-y !important;
+    }
+    .js-plotly-plot {
+        touch-action: pan-y !important;
+    }
        Use broad selectors + !important since Streamlit's internal class
        names vary between versions.
     ==================================================================== */
@@ -360,28 +402,14 @@ CUSTOM_CSS = """
     .stButton button div {
         color: #e9ebf1 !important;
     }
-    /* ====================================================================
-       MOBILE RESPONSIVE
-    ==================================================================== */
-    @media (max-width: 768px) {
-        .hero-banner {
-            height: 100px;
-        }
-        .hero-content h1 {
-            font-size: 1.3rem;
-        }
-        .kpi-value {
-            font-size: 1.4rem;
-        }
-    }
     .stButton button {
         width: 100% !important;
         background-color: #12151f !important;
         border: 1px solid #232838 !important;
         border-radius: 14px !important;
-        padding: 10px 8px !important;
+        padding: 16px 10px !important;
         font-weight: 700 !important;
-        font-size: 0.78rem !important;
+        font-size: 0.85rem !important;
         line-height: 1.4 !important;
         white-space: pre-line !important;
         transition: border-color 0.15s ease, transform 0.15s ease !important;
@@ -639,23 +667,27 @@ st.markdown(
 st.markdown("#### Quick Stock Picker")
 st.caption("Click a company to view its dashboard below.")
 
-grid_cols = st.columns(5)
-for i, (sym, info) in enumerate(STOCKS.items()):
-    with grid_cols[i % 5]:
-        is_active = (sym == st.session_state.selected_ticker)
-        wrapper_class = "picker-active" if is_active else ""
-
-        st.markdown(f'<div class="{wrapper_class}">', unsafe_allow_html=True)
-        clicked = st.button(
-            f"{info['name']}\n{sym}",
-            key=f"picker_{sym}",
-            use_container_width=True,
-        )
-        st.markdown("</div>", unsafe_allow_html=True)
-
-        if clicked:
-            st.session_state.selected_ticker = sym
-            st.rerun()
+# Render in rows of 5 (desktop) — Streamlit stacks to 1 col on mobile,
+# but we use 2 columns explicitly to keep it compact on small screens.
+stock_list = list(STOCKS.items())
+# Row 1: first 5 stocks, Row 2: last 5 stocks
+for row_start in [0, 5]:
+    row_stocks = stock_list[row_start:row_start + 5]
+    cols = st.columns(len(row_stocks))
+    for col, (sym, info) in zip(cols, row_stocks):
+        with col:
+            is_active = (sym == st.session_state.selected_ticker)
+            wrapper_class = "picker-active" if is_active else ""
+            st.markdown(f'<div class="{wrapper_class}">', unsafe_allow_html=True)
+            clicked = st.button(
+                f"{info['name']}\n{sym}",
+                key=f"picker_{sym}",
+                use_container_width=True,
+            )
+            st.markdown("</div>", unsafe_allow_html=True)
+            if clicked:
+                st.session_state.selected_ticker = sym
+                st.rerun()
 
 # Re-read selected_ticker in case a picker button just changed it
 selected_ticker = st.session_state.selected_ticker
@@ -841,7 +873,7 @@ with tab_overview:
             height=500,
         )
 
-        st.plotly_chart(fig_candle, use_container_width=True)
+        st.plotly_chart(fig_candle, use_container_width=True, config={"scrollZoom": False, "displayModeBar": True, "modeBarButtonsToRemove": ["pan2d", "lasso2d", "select2d"]})
 
         # ------------------------------------------------------------
         # RSI Chart
@@ -872,7 +904,7 @@ with tab_overview:
             yaxis=dict(title="RSI", range=[0, 100]),
             height=300,
         )
-        st.plotly_chart(fig_rsi, use_container_width=True)
+        st.plotly_chart(fig_rsi, use_container_width=True, config={"scrollZoom": False, "displayModeBar": True, "modeBarButtonsToRemove": ["pan2d", "lasso2d", "select2d"]})
 
         # ------------------------------------------------------------
         # MACD Chart
@@ -904,7 +936,7 @@ with tab_overview:
             yaxis=dict(title="MACD"),
             height=300,
         )
-        st.plotly_chart(fig_macd, use_container_width=True)
+        st.plotly_chart(fig_macd, use_container_width=True, config={"scrollZoom": False, "displayModeBar": True, "modeBarButtonsToRemove": ["pan2d", "lasso2d", "select2d"]})
 
         st.caption(
             "ℹ️ RSI and MACD shown here are computed live from the loaded "
@@ -979,7 +1011,7 @@ with tab_ml:
                 },
             ))
             fig_gauge.update_layout(**PLOTLY_LAYOUT, height=300)
-            st.plotly_chart(fig_gauge, use_container_width=True)
+            st.plotly_chart(fig_gauge, use_container_width=True, config={"scrollZoom": False, "displayModeBar": True, "modeBarButtonsToRemove": ["pan2d", "lasso2d", "select2d"]})
 
     st.subheader("Feature Importance (Illustrative)")
     st.caption(
@@ -1013,7 +1045,7 @@ with tab_ml:
         yaxis=dict(title=""),
         height=450,
     )
-    st.plotly_chart(fig_importance, use_container_width=True)
+    st.plotly_chart(fig_importance, use_container_width=True, config={"scrollZoom": False, "displayModeBar": True, "modeBarButtonsToRemove": ["pan2d", "lasso2d", "select2d"]})
 
 
 # --------------------------------------------------------------------
@@ -1077,7 +1109,7 @@ with tab_compare:
             yaxis=dict(title="Normalized Price (Base = 100)"),
             height=400,
         )
-        st.plotly_chart(fig_compare, use_container_width=True)
+        st.plotly_chart(fig_compare, use_container_width=True, config={"scrollZoom": False, "displayModeBar": True, "modeBarButtonsToRemove": ["pan2d", "lasso2d", "select2d"]})
 
         st.markdown("#### Side-by-Side Snapshot")
         col_a, col_b = st.columns(2)
@@ -1163,7 +1195,7 @@ with tab_compare:
             **PLOTLY_LAYOUT,
             height=550,
         )
-        st.plotly_chart(fig_heatmap, use_container_width=True)
+        st.plotly_chart(fig_heatmap, use_container_width=True, config={"scrollZoom": False, "displayModeBar": True, "modeBarButtonsToRemove": ["pan2d", "lasso2d", "select2d"]})
 
         if load_errors:
             st.caption(f"⚠️ Could not load data for: {', '.join(load_errors)}")
