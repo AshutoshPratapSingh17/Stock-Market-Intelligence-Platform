@@ -315,22 +315,22 @@ Required GitHub repo secrets:
 
 ## 📊 Screenshots
 
-> _Add screenshots of your running dashboard here once deployed._
-
-| Overview Tab | News & Sentiment Tab |
+| Overview Tab | ML Insights Tab |
 |---|---|
-| ![Overview Screenshot](docs/screenshots/overview.png) | ![Sentiment Screenshot](docs/screenshots/sentiment.png) |
+| ![Overview Screenshot](docs/screenshots/overview.png) | ![ML Screenshot](docs/screenshots/ml_insights.png) |
 
-| ML Insights Tab | Compare Stocks Tab |
-|---|---|
-| ![ML Screenshot](docs/screenshots/ml_insights.png) | ![Compare Screenshot](docs/screenshots/compare.png) |
+| Compare Stocks Tab |
+|---|
+| ![Compare Screenshot](docs/screenshots/compare.png) |
 
 ---
 
 ## 🌐 Live Demo
 
-- **Dashboard**: [https://your-app-name.onrender.com](https://your-app-name.onrender.com) _(placeholder — update after deployment)_
-- **API Docs**: [https://your-api-name.onrender.com/docs](https://your-api-name.onrender.com/docs) _(placeholder — update after deployment)_
+- **Dashboard**: [https://stock-dashboard-pocy.onrender.com](https://stock-dashboard-pocy.onrender.com)
+- **API Docs**: [https://stock-api-dws4.onrender.com/docs](https://stock-api-dws4.onrender.com/docs)
+
+> ⚠️ Hosted on Render's free tier — the first request after a period of inactivity may take 30-60 seconds to wake up the service.
 
 ---
 
