@@ -154,9 +154,6 @@ uvicorn api:app --reload --host 0.0.0.0 --port 8000
 streamlit run app.py
 ```
 
-Visit:
-- API docs: http://localhost:8000/docs
-- Dashboard: http://localhost:8501
 
 ---
 
@@ -327,8 +324,7 @@ Required GitHub repo secrets:
 
 ## 🌐 Live Demo
 
-- **Dashboard**: [https://stock-dashboard-pocy.onrender.com](https://stock-dashboard-pocy.onrender.com)
-- **API Docs**: [https://stock-api-dws4.onrender.com/docs](https://stock-api-dws4.onrender.com/docs)
+- **Dashboard**: https://stock-dashboard-pocy.onrender.com/
 
 > ⚠️ Hosted on Render's free tier — the first request after a period of inactivity may take 30-60 seconds to wake up the service.
 
